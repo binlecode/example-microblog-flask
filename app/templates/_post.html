@@ -1,0 +1,15 @@
+<table class="table table-hover">
+    <tr valign="top">
+        <td width="70px"><img src="{{ post.author.avatar(70) }}"></td>
+        <td>
+            {{ post.author.username }} says:
+            <br>
+            {{ post.body }}
+            <br>
+            {# moment() is for local tz time conversion #}
+            {# see `app/__init__.py` and `templates/base.html` #}
+{#            - posted at {{ moment(post.timestamp).format('LLL') }} -#}
+            - posted {{ moment(post.timestamp).fromNow() }} -
+        </td>
+    </tr>
+</table>

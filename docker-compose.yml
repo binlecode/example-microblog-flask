@@ -1,0 +1,43 @@
+version: "3.9"
+services:
+  web:
+    # Compose will build and tag it with a generated name, and use that image
+    build: .
+    ports:
+      - "8000:5000"
+    environment:
+      - SECRET_KEY=microblog-secret-key-that-nobody-knows
+      - DATABASE_URL=mysql+pymysql://microblog:mbmysql123!@mysql/microblog
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - mysql
+      - redis
+    restart: always
+  worker:
+    image: "microblog:latest"
+    environment:
+      - SECRET_KEY=rq-worker-secret-key-that-nobody-knows
+      - DATABASE_URL=mysql+pymysql://microblog:mbmysql123!@mysql/microblog
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - web
+    # Override the default CMD with a split of entrypoint and command parts
+    entrypoint: venv/bin/rq
+    command: ["worker", "-u", "redis://redis:6379/0", "microblog-tasks"]
+    restart: always
+  mysql:
+    image: "mysql/mysql-server:latest"
+    ports:
+      - "3306:3306"
+    environment:
+      - name=value
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=microblog
+      - MYSQL_USER=microblog
+      - MYSQL_PASSWORD=mbmysql123!
+    restart: always
+  redis:
+    image: "redis:6.2-alpine"
+    ports:
+      - "6379:6379"
+    restart: always

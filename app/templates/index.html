@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <h1>Hi, {{ current_user.username }}!</h1>
+    <hr>
+
+    {# use bootstrap provided quick_form helper to replace manual coding #}
+    <div class="row">
+        <div class="col-md-8">
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
+    {#    <form action="" method="post">#}
+    {#        {{ form.hidden_tag() }}#}
+    {#        <p>#}
+    {#            {{ form.post.label }}#}
+    {#            <br>#}
+    {#            {{ form.post(col=32, rows=4) }}#}
+    {#            <br>#}
+    {#            {% for error in form.post.errors %}#}
+    {#                <span style="color: red;">[{{ error }}]</span>#}
+    {#            {% endfor %}#}
+    {#        </p>#}
+    {#        {{ form.submit() }}#}
+    {#    </form>#}
+    <br>
+
+    {% for post in posts %}
+        {# use sub-template to replace inline div in for loop #}
+        {% include '_post.html' %}
+        {#        <div>#}
+        {#            <p>{{ post.author.username }} says: <b>{{ post.body }}</b></p>#}
+        {#            <p>- posted at {{ post.timestamp }} -</p>#}
+        {#        </div>#}
+    {% endfor %}
+    {# posts list pagination #}
+    {% include '_pagination.html' %}
+{% endblock %}
