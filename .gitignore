@@ -49,4 +49,5 @@ microblog.log*
 # macos cache
 **/.DS_Store
 
+# logs
 logs/
